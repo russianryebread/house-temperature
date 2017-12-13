@@ -4,13 +4,19 @@ const app = express()
 
 const port = 80
 
+app.set('view engine', 'pug')
+app.use(express.static(__dirname + 'public'));
+
 var devices = thermometers.getDevices()
 console.log(`Devices found: ${devices}`)
 
 app.get('/', (req, res) => {
 	
-	thermometers.readTemperature(devices[0], (err, value) => {
-		res.send(`<html><h1>Hoshor House Temperature: ${parseFloat(value).toFixed(1)}° F`)
+	thermometers.readTemperature(devices[0], (err, temp) => {
+		res.render('index', {
+			f: temp,
+			formatted: `${parseFloat(temp).toFixed(1)}° F`
+		})
 	}, thermometers.toDegreeFahrenheit);
 
 })
