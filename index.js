@@ -5,7 +5,7 @@ const app = express()
 const port = 80
 
 app.set('view engine', 'pug')
-app.use(express.static(__dirname + 'public'));
+app.use(express.static('public'))
 
 var devices = thermometers.getDevices()
 console.log(`Devices found: ${devices}`)
