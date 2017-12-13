@@ -1,0 +1,25 @@
+{
+  "name": "house-temperature",
+  "version": "1.0.0",
+  "description": "Measure House temperature with Raspberry pi and TEMPer.",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.16.2",
+    "pug": "^2.0.0-rc.4",
+    "temper1": "0.0.9"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/russianryebread/house-temperature.git"
+  },
+  "author": "Ryan Hoshor <ryan@hoshor.me>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/russianryebread/house-temperature/issues"
+  },
+  "homepage": "https://github.com/russianryebread/house-temperature#readme"
+}
