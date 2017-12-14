@@ -34,8 +34,8 @@ app.get('/api', (req, res) => {
     
     thermometers.readTemperature(devices[0], (err, c) => {
         res.json({
-            c: `${utils.round(c)}`,
-            f: `${utils.round(thermometers.celsiusToFahrenheit(c))}`,
+            c: utils.round(c),
+            f: utils.round(thermometers.celsiusToFahrenheit(c)),
         })
     });
 
