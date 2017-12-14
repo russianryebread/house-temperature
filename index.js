@@ -1,11 +1,13 @@
 const thermometers = require("temper1");
 const express = require('express')
+const cors = require('cors')
 const app = express()
 
 const port = 80
 
 app.set('view engine', 'pug')
 app.use(express.static('public'))
+app.use(cors())
 
 var devices = thermometers.getDevices()
 console.log(`Devices found: ${devices}`)
