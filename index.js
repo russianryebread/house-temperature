@@ -1,6 +1,7 @@
-const thermometers = require("temper1");
-const express = require('express')
+const thermometers = require('temper1')
+const utils = require('./utils.js')
 const cors = require('cors')
+const express = require('express')
 const app = express()
 
 const port = 80
@@ -13,32 +14,30 @@ var devices = thermometers.getDevices()
 console.log(`Devices found: ${devices}`)
 
 app.get('/', (req, res) => {
-	
-	thermometers.readTemperature(devices[0], (err, temp) => {
-		let f = thermometers.celsiusToFahrenheit(temp)
-		let fmt = function(t){ return `${parseFloat(t).toFixed(1)}°` }
-		res.render('index', {
-			c: temp,
-			f: f,
-			formatted: {
-				c: `${fmt(temp)} C`,
-				f: `${fmt(f)} F`
-			}
-		})
-	});
+    
+    thermometers.readTemperature(devices[0], (err, temp) => {
+        let f = thermometers.celsiusToFahrenheit(temp)
+        res.render('index', {
+            c: temp,
+            f: f,
+            formatted: {
+                c: `${utils.fmt(temp)} C`,
+                f: `${utils.fmt(f)} F`
+            }
+        })
+    });
 
 })
 
 
 app.get('/api', (req, res) => {
-	
-	thermometers.readTemperature(devices[0], function(err, value) {
-		console.log(`Result: ${value}`);
-		res.json({
-			f: value,
-			pretty: `${parseFloat(value).toFixed(1)}° F`
-		})
-	}, thermometers.toDegreeFahrenheit);
+    
+    thermometers.readTemperature(devices[0], (err, c) => {
+        res.json({
+            c: c,
+            f: thermometers.celsiusToFahrenheit(c),
+        })
+    });
 
 })
 
