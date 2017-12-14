@@ -13,11 +13,17 @@ console.log(`Devices found: ${devices}`)
 app.get('/', (req, res) => {
 	
 	thermometers.readTemperature(devices[0], (err, temp) => {
+		let f = thermometers.celsiusToFahrenheit(temp)
+		let fmt = function(t){ return `${parseFloat(t).toFixed(1)}°` }
 		res.render('index', {
-			f: temp,
-			formatted: `${parseFloat(temp).toFixed(1)}° F`
+			c: temp,
+			f: f,
+			formatted: {
+				c: `${fmt(temp)} C`,
+				f: `${fmt(f)} F`
+			}
 		})
-	}, thermometers.toDegreeFahrenheit);
+	});
 
 })
 
