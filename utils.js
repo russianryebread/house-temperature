@@ -1,11 +1,7 @@
-var utils = {
-	fmt: (t) => {
-		return `${this.round(t)}°`
-	},
-
-	round: (t) => {
-		return parseFloat(t).toFixed(1)
-	}
+exports.fmt = (t) => {
+    return `${exports.round(t)}°`
 }
 
-exports.utils
+exports.round = (t) => {
+    return parseFloat(t).toFixed(1)
+}
