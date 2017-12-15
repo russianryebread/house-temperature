@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="UTF-8">
     <title>House Temp</title>
@@ -8,10 +7,11 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.10/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <style>
-        html, body {
+        html,
+        body {
             margin: 0;
             padding: 0;
-            font-family: -apple-system,system-ui,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;
+            font-family: -apple-system, system-ui, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif;
             font-size: 14px;
             line-height: 1.25;
             color: #5a636a;
@@ -31,11 +31,15 @@
             font-size: 15rem;
         }
 
-        .hot { background-color: rgb(218, 154, 154); }
-        .cold { background-color: rgb(108, 147, 185); }
+        .hot {
+            background-color: rgb(218, 154, 154);
+        }
+
+        .cold {
+            background-color: rgb(108, 147, 185);
+        }
     </style>
 </head>
-
 <body>
     <div id="app" :style="bgcolor">
         <h1 class="temp" v-if="temp.f">
@@ -49,15 +53,15 @@
             data: {
                 temp: {}
             },
-            mounted: function() {
+            mounted: function () {
                 this.getData()
             },
             methods: {
-                percentageToHsl: function(percentage, hue0, hue1) {
+                percentageToHsl: function (percentage, hue0, hue1) {
                     var hue = (percentage * (hue1 - hue0)) + hue0;
                     return 'hsl(' + hue + ', 70%, 50%)';
                 },
-                normalize: function(val, max, min) {
+                normalize: function (val, max, min) {
                     return (val - min) / (max - min)
                 },
                 getData() {
@@ -73,7 +77,7 @@
                 }
             },
             computed: {
-                bgcolor: function() {
+                bgcolor: function () {
                     var n = this.normalize(this.temp.f, 100, 20)
                     return 'background-color: ' + this.percentageToHsl(n, 240, 37)
                 }
@@ -81,5 +85,4 @@
         })
     </script>
 </body>
-
 </html>
