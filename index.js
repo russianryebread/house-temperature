@@ -1,3 +1,4 @@
+require('dotenv').config()
 const thermometers = require('temper1')
 const Db = require('./db')
 const utils = require('./utils.js')
@@ -6,7 +7,7 @@ const express = require('express')
 const app = express()
 const db = new Db()
 
-const port = 8000
+const port = (process.env.PORT) ? process.env.PORT : 80
 
 app.set('view engine', 'pug')
 app.use(express.static('public'))

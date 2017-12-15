@@ -53,4 +53,6 @@ class Db
     }
 }
 
+exports.init = () => { return new Db() }
+
 module.exports = Db
