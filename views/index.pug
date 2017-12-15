@@ -1,8 +1,14 @@
+doctype html
 html
-  head
-    title Hoshor House Temperature
-    link(rel='stylesheet', href='styles/style.css', type='text/css' )
-  body
-    h1 Hoshor House Temperature
-    h2= formatted.f
-    h2= formatted.c
+    head
+        meta(charset="UTF-8")
+        title House Temp
+        // <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        script(src="https://cdn.jsdelivr.net/npm/vue@2.5.10/dist/vue.js")
+        script(src="https://unpkg.com/axios/dist/axios.min.js")
+        link(rel="stylesheet", href="styles/style.css")
+    body
+        #app(:style="bgcolor")
+            h1.temp(v-if="temp.f")
+                | {{ temp.f }}° F
+        script(src="js/app.js")
