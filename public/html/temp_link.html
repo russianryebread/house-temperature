@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>House Temp</title>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.10/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <div id="app" :style="bgcolor">
+        <h1 class="temp" v-if="temp.f">
+            {{ temp.f }}° F
+        </h1>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
