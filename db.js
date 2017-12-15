@@ -18,7 +18,7 @@ class Db
     historic() {
         let results = []
         let sql = `SELECT * FROM (SELECT * FROM ${TABLE_NAME} ORDER BY created_at ASC LIMIT 100) ORDER BY created_at DESC`
-        this.db.each(sql, , (err, row) => {
+        this.db.each(sql, (err, row) => {
             if (err) throw err
             results.push(row)
         })
