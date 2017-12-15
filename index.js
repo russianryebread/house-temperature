@@ -33,11 +33,12 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api', (req, res) => {
+    let history = db.historic()
     thermometers.readTemperature(devices[0], (err, c) => {
         res.json({
             c: utils.round(c),
             f: utils.round(thermometers.celsiusToFahrenheit(c)),
-            history: db.historic()
+            history: history
         })
     })
 })
