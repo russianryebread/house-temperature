@@ -18,13 +18,10 @@ class Db
     historic() {
         let results = []
         let sql = `SELECT * FROM (SELECT * FROM ${TABLE_NAME} ORDER BY created_at ASC LIMIT 100) ORDER BY created_at DESC`
-        this.db.all(sql, (err, rows) => {
+        this.db.each(sql, (err, row) => {
             if (err) throw err
-
-            // rows.forEach(function (row) {
-            //     console.log(row.id + ": " + row.info);
-            // })
-
+            results.push(row)
+        }, () => {
             return results
         })
     }
