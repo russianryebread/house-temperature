@@ -32,7 +32,7 @@ class Db
             success: true,
             message: "Updated!"
         }
-        let sql = `INSERT INTO ${TABLE_NAME}(temp, created_at)`
+        let sql = `INSERT INTO ${TABLE_NAME} (temp, created_at) VALUES (?, ?)`
         let date = new Date().toISOString()
 
         this.db.run(sql, [temp, date], function(err) {
