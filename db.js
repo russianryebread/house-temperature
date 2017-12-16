@@ -27,24 +27,23 @@ class Db
         })
     }
 
-    save(temp) {
-        let response = {
-            success: true,
-            message: "Updated!"
-        }
+    save(temp, callback) {
         let sql = `INSERT INTO ${TABLE_NAME} (temp, created_at) VALUES (?, ?)`
         let date = new Date().toISOString()
 
-        this.db.run(sql, [temp, date], function(err) {
+        let response = {
+            success: true,
+            message: `Updating temp to ${temp} at ${date}.`
+        }
+
+        this.db.run(sql, [temp, date], (err) => {
             if (err) {
                 console.error(err.message)
                 response.success = false
                 response.message = `Error saving temp: ${err.message}`
-                return response
             }
+            return callback(response)
         })
-        
-        return response
     }
 
 

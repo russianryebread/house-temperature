@@ -21,6 +21,8 @@ function readTemp(res, callback) {
         thermometers.readTemperature(devices[0], callback)
     } catch (error) {
         // If we get an exception, try getting the device again.
+        // Sometimes the device changes addresses, so this keeps
+        // the app alive.
         try {
             devices = thermometers.getDevices()
         } catch (error) {
@@ -61,7 +63,9 @@ app.get('/api', (req, res) => {
 
 app.post('/api/save', (req, res) => {
     readTemp(res, (err, c) => {
-        res.json(db.save(thermometers.celsiusToFahrenheit(c)))
+        db.save(thermometers.celsiusToFahrenheit(c), (dbRes) => {
+            res.json(dbRes)
+        })
     })
 })
 
