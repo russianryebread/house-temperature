@@ -1,7 +1,7 @@
 html, body {
     margin: 0;
     padding: 0;
-    font-family: -apple-system,system-ui,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;
+    font-family: -apple-system, system-ui, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif;
     font-size: 14px;
     line-height: 1.25;
     color: #5a636a;
@@ -21,5 +21,29 @@ h1.temp {
     font-size: 15rem;
 }
 
-.hot { background-color: rgb(218, 154, 154); }
-.cold { background-color: rgb(108, 147, 185); }
+.hot {
+    background-color: rgb(218, 154, 154);
+}
+
+.cold {
+    background-color: rgb(108, 147, 185);
+}
+
+.label {
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 3rem;
+    font-weight: 200;
+    position: relative;
+    right: 20px;
+    text-align: right;
+    margin: 0 auto;
+    max-width: 950px;
+}
+
+.label.min {
+    top: -50px;
+}
+
+.label.max {
+    top: 50px;
+}
