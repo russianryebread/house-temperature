@@ -16,9 +16,24 @@ app.use(cors())
 let devices = thermometers.getDevices()
 console.log(`Devices found: ${devices}`)
 
+function readTemp(callback) {
+    try {
+        thermometers.readTemperature(devices[0], callback)
+    } catch (error) {
+        // callback(error, null)
+        try {
+            // try getting the device again
+            devices = thermometers.getDevices()
+        } catch (error) {
+            return res.json({error: error})
+        }
+        return res.json({error: error})
+    }
+}
+
 app.get('/', (req, res) => {
     
-    thermometers.readTemperature(devices[0], (err, temp) => {
+    readTemp((err, temp) => {
         let f = thermometers.celsiusToFahrenheit(temp)
         res.render('index', {
             c: temp,
@@ -34,7 +49,7 @@ app.get('/', (req, res) => {
 
 app.get('/api', (req, res) => {
     db.historic((history) => {
-        thermometers.readTemperature(devices[0], (err, c) => {
+        readTemp((err, c) => {
             res.json({
                 c: utils.round(c),
                 f: utils.round(thermometers.celsiusToFahrenheit(c)),
@@ -45,7 +60,7 @@ app.get('/api', (req, res) => {
 })
 
 app.post('/api/save', (req, res) => {
-    thermometers.readTemperature(devices[0], (err, c) => {
+    readTemp((err, c) => {
         res.json(db.save(thermometers.celsiusToFahrenheit(c)))
     })
 })
