@@ -46,12 +46,14 @@ var app = new Vue({
             let min = Number.POSITIVE_INFINITY
             let max = Number.NEGATIVE_INFINITY
 
-            for (const value of arr) {
-                min = Math.min(min, value)
-                max = Math.max(max, value)
+            if(!this.temp.history) return {}
+
+            for (const v of this.temp.history) {
+                min = Math.min(min, v.temp)
+                max = Math.max(max, v.temp)
             }
 
-            return { min: min, max: max }
+            return { min: min.toFixed(1), max: max.toFixed(1) }
         }
     }
 })

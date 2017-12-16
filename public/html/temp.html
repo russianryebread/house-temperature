@@ -5,6 +5,7 @@
     <title>House Temp</title>
     <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.10/dist/vue.js"></script>
+    <script src=//unpkg.com/vuetrend></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <style>
         html,
@@ -38,6 +39,25 @@
         .cold {
             background-color: rgb(108, 147, 185);
         }
+
+        .label {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 3rem;
+            font-weight: 200;
+            position: relative;
+            right: 20px;
+            text-align: right;
+            margin: 0 auto;
+            max-width: 950px;
+        }
+
+        .label.min {
+            top: -50px;
+        }
+
+        .label.max {
+            top: 50px;
+        }
     </style>
 </head>
 <body>
@@ -45,44 +65,17 @@
         <h1 class="temp" v-if="temp.f">
             {{ temp.f }}° F
         </h1>
+        <div class="label max">{{ highLow.max }}</div>
+        <trend
+            :data="historicTemps"
+            :gradient="['#81bce9', '#f1b57d']"
+            auto-draw
+            smooth>
+        </trend>
+        <div class="label min">{{ highLow.min }}</div>
     </div>
 
-    <script>
-        var app = new Vue({
-            el: '#app',
-            data: {
-                temp: {}
-            },
-            mounted: function () {
-                this.getData()
-            },
-            methods: {
-                percentageToHsl: function (percentage, hue0, hue1) {
-                    var hue = (percentage * (hue1 - hue0)) + hue0;
-                    return 'hsl(' + hue + ', 70%, 50%)';
-                },
-                normalize: function (val, max, min) {
-                    return (val - min) / (max - min)
-                },
-                getData() {
-                    var self = this
-                    var url = 'https://tenable-goldfish-6761.dataplicity.io/api'
-                    axios.get(url).then(function (response) {
-                        console.log(response)
-                        self.temp = response.data
-                        setTimeout(self.getData, 15000)
-                    }).catch(function (error) {
-                        console.log(error)
-                    });
-                }
-            },
-            computed: {
-                bgcolor: function () {
-                    var n = this.normalize(this.temp.f, 100, 20)
-                    return 'background-color: ' + this.percentageToHsl(n, 240, 37)
-                }
-            }
-        })
-    </script>
+    <script src="js/app.js"></script>
+    <!-- <script src="https://rawgit.com/russianryebread/house-temperature/master/public/js/app.js"></script> -->
 </body>
 </html>
