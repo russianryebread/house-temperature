@@ -7,7 +7,7 @@ class Db
 {
     constructor()
     {
-        this.db = new sqlite3.Database(`./db/${DB_NAME}`);
+        this.db = new sqlite3.Database(`${__dirname}/db/${DB_NAME}`);
         this.up()
     }
 
@@ -15,9 +15,9 @@ class Db
         this.db.run(`CREATE TABLE IF NOT EXISTS ${TABLE_NAME} (temp, created_at)`);
     }
 
-    historic(callback) {
+    historic(callback, limit = 100) {
         let results = []
-        let sql = `SELECT * FROM (SELECT * FROM ${TABLE_NAME} ORDER BY created_at ASC LIMIT 100) ORDER BY created_at DESC`
+        let sql = `SELECT * FROM (SELECT * FROM ${TABLE_NAME} ORDER BY created_at ASC LIMIT ${limit}) ORDER BY created_at DESC LIMIT ${limit}`
 
         this.db.each(sql, (err, row) => {
             if (err) throw err

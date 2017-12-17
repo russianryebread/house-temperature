@@ -1,11 +1,14 @@
 require('dotenv').config()
-const thermometers = require('temper1')
-const Db = require('./db')
+const Temp = require('./temp.js')
+const plug = require('./plug.js')
+const Db = require('./db.js')
 const utils = require('./utils.js')
 const cors = require('cors')
+const basicAuth = require('express-basic-auth')
 const express = require('express')
 const app = express()
 const db = new Db()
+const temp = new Temp()
 
 const port = (process.env.PORT) ? process.env.PORT : 80
 
@@ -13,30 +16,14 @@ app.set('view engine', 'pug')
 app.use(express.static('public'))
 app.use(cors())
 
-let devices = thermometers.getDevices()
-console.log(`Devices found: ${devices}`)
-
-function readTemp(res, callback) {
-    try {
-        thermometers.readTemperature(devices[0], callback)
-    } catch (error) {
-        // If we get an exception, try getting the device again.
-        // Sometimes the device changes addresses, so this keeps
-        // the app alive.
-        try {
-            devices = thermometers.getDevices()
-        } catch (error) {
-            return res.json({error: error})
-        }
-
-        return res.json({error: error})
-    }
-}
+const auth = basicAuth({
+    users: { 'admin': process.env.ADMIN_ACCESS_PASSWORD },
+    challenge: false
+})
 
 app.get('/', (req, res) => {
-    
-    readTemp(res, (err, temp) => {
-        let f = thermometers.celsiusToFahrenheit(temp)
+    temp.read(res, (err, temp) => {
+        let f = temp.c2f(temp)
         res.render('index', {
             c: temp,
             f: f,
@@ -45,16 +32,15 @@ app.get('/', (req, res) => {
                 f: `${utils.fmt(f)} F`
             }
         })
-    });
-
+    })
 })
 
 app.get('/api', (req, res) => {
     db.historic((history) => {
-        readTemp(res, (err, c) => {
+        temp.read(res, (err, c) => {
             res.json({
                 c: utils.round(c),
-                f: utils.round(thermometers.celsiusToFahrenheit(c)),
+                f: utils.round(temp.c2f(c)),
                 history: history
             })
         })
@@ -62,10 +48,28 @@ app.get('/api', (req, res) => {
 })
 
 app.post('/api/save', (req, res) => {
-    readTemp(res, (err, c) => {
-        db.save(thermometers.celsiusToFahrenheit(c), (dbRes) => {
+    temp.read(res, (err, c) => {
+        db.save(temp.c2f(c), (dbRes) => {
             res.json(dbRes)
         })
+    })
+})
+
+app.get('/api/plug', (req, res) => {
+    plug.status((status) => {
+        res.json({ status: status })
+    })
+})
+
+app.post('/api/plug/on', auth, (req, res) => {
+    plug.on((status) => {
+        res.json({ status: status })
+    })
+})
+
+app.post('/api/plug/off', auth, (req, res) => {
+    plug.off((status) => {
+        res.json({ status: status })
     })
 })
 
