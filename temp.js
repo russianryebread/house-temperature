@@ -6,6 +6,10 @@ class Temp
     constructor()
     {
         this.devices = this.getDevices()
+        this.update = {
+            time: 0,
+            temp: null
+        }
     }
 
     getDevices()
@@ -21,6 +25,23 @@ class Temp
             console.error(error)
         }
         return []
+    }
+
+    cachedRead(res, callback)
+    {
+        var now = new Date().getTime()
+        var cacheTime = 3000 // Three Seconds
+        var t = 0
+
+        if(this.update.time < (now - cacheTime)) {
+            return this.read(res, (err, c) => {
+                this.update.temp = c
+                this.update.time = new Date().getTime()
+                callback(err, c)
+            })
+        }
+
+        return callback(null, this.lastTemp.temp)
     }
 
     read(res, callback)

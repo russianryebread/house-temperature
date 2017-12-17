@@ -22,7 +22,7 @@ const auth = basicAuth({
 })
 
 app.get('/', (req, res) => {
-    temp.read(res, (err, c) => {
+    temp.cachedRead(res, (err, c) => {
         let f = temp.c2f(c)
         res.render('index', {
             c: c,
@@ -37,7 +37,7 @@ app.get('/', (req, res) => {
 
 app.get('/api', (req, res) => {
     db.historic((history) => {
-        temp.read(res, (err, c) => {
+        temp.cachedRead(res, (err, c) => {
             res.json({
                 c: utils.round(c),
                 f: utils.round(temp.c2f(c)),
@@ -48,7 +48,9 @@ app.get('/api', (req, res) => {
 })
 
 app.post('/api/save', (req, res) => {
-    temp.read(res, (err, c) => {
+    temp.cachedRead(res, (err, c) => {
+        if(err) { return res.json({error: "Error reading temperature"}) }
+
         db.save(temp.c2f(c), (dbRes) => {
             res.json(dbRes)
         })
