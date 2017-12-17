@@ -22,13 +22,13 @@ const auth = basicAuth({
 })
 
 app.get('/', (req, res) => {
-    temp.read(res, (err, temp) => {
-        let f = temp.c2f(temp)
+    temp.read(res, (err, c) => {
+        let f = temp.c2f(c)
         res.render('index', {
-            c: temp,
+            c: c,
             f: f,
             formatted: {
-                c: `${utils.fmt(temp)} C`,
+                c: `${utils.fmt(c)} C`,
                 f: `${utils.fmt(f)} F`
             }
         })
