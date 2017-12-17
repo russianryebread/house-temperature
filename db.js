@@ -17,7 +17,8 @@ class Db
 
     historic(callback, limit = 100) {
         let results = []
-        let sql = `SELECT * FROM (SELECT * FROM ${TABLE_NAME} ORDER BY created_at DESC LIMIT ${limit}) ORDER BY created_at ASC`
+        //let sql = `SELECT * FROM (SELECT * FROM ${TABLE_NAME} ORDER BY created_at DESC LIMIT ${limit}) ORDER BY created_at ASC`
+        let sql = `SELECT * FROM ${TABLE_NAME} ORDER BY created_at DESC LIMIT ${limit}`
 
         this.db.each(sql, (err, row) => {
             if (err) throw err
