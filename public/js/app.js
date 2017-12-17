@@ -28,7 +28,7 @@ var app = new Vue({
             }).catch(function (error) {
                 console.error(error)
                 self.error = "Error Returning Temperature :("
-                self.temp = null
+                self.temp.f = null
             });
         }
     },
