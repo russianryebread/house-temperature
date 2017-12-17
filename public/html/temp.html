@@ -16,7 +16,7 @@
         <h1 class="temp" v-if="temp.f">
             {{ temp.f }}° F
         </h1>
-        <h1 class="temp" v-else>{{ error }}</h1>
+        <h2 class="error" v-else>{{ error }}</h2>
         <div class="label max">{{ highLow.max }}</div>
         <trend
             :data="historicTemps"
