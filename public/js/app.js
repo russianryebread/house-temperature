@@ -1,7 +1,8 @@
 var app = new Vue({
     el: '#app',
     data: {
-        temp: {}
+        temp: {},
+        error: null
     },
     mounted: function () {
         this.getData()
@@ -21,10 +22,13 @@ var app = new Vue({
             var self = this
             var url = 'https://tenable-goldfish-6761.dataplicity.io/api'
             axios.get(url).then(function (response) {
+                self.error = null
                 self.temp = response.data
                 setTimeout(self.getData, 15000)
             }).catch(function (error) {
                 console.error(error)
+                self.error = "Error Returning Temperature :("
+                self.temp = null
             });
         }
     },

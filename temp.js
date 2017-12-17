@@ -39,6 +39,7 @@ class Temp
             // the app alive.
             this.getDevices()
 
+            res.status(500)
             return res.json({error: error.message})
         }
     }
