@@ -35,12 +35,14 @@ class Temp
 
         if(this.update.time < (now - cacheTime)) {
             return this.read(res, (err, c) => {
+                console.log(`Updating cached temperature (${this.update.temp}).`)
                 this.update.temp = c
                 this.update.time = new Date().getTime()
                 callback(err, c)
             })
         }
-
+        
+        console.log(`Returning cached temperature (${this.update.temp}). Cache expires in ${(now - cacheTime) / 1000} seconds.`)
         return callback(null, this.update.temp)
     }
 
