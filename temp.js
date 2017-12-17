@@ -42,7 +42,7 @@ class Temp
             })
         }
         
-        console.log(`Returning cached temperature (${this.update.temp}). Cache expires in ${(this.update.time - now) / 1000} seconds.`)
+        console.log(`Returning cached temperature (${this.update.temp}). Cache expires in ${cacheTime - (now - this.update.time)} seconds.`)
         return callback(null, this.update.temp)
     }
 
