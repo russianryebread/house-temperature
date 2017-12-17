@@ -31,7 +31,7 @@ var app = new Vue({
     computed: {
         bgcolor: function () {
             var n = this.normalize(this.temp.f, 100, 20)
-            return 'background-color: ' + this.percentageToHsl(n, 240, 37)
+            return `background: linear-gradient(${this.percentageToHsl(n, 240, 37)}, ${this.percentageToHsl(n, 250, 55)})`
         },
         historicTemps() {
             var h = this.temp.history
