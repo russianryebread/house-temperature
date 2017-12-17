@@ -7,9 +7,9 @@ var app = new Vue({
         this.getData()
     },
     methods: {
-        percentageToHsl: function (percentage, hue0, hue1) {
+        percentageToHsl: function (percentage, hue0, hue1, saturation = 70, lightness = 50) {
             var hue = this.niceNumbers((percentage * (hue1 - hue0)) + hue0)
-            return 'hsl(' + hue + ', 70%, 50%)';
+            return 'hsl(' + hue + ', ' + saturation + '%, ' + lightness + '%)';
         },
         normalize: function (val, max, min) {
             return (val - min) / (max - min)
@@ -31,7 +31,7 @@ var app = new Vue({
     computed: {
         bgcolor: function () {
             var n = this.normalize(this.temp.f, 100, 20)
-            return `background: linear-gradient(${this.percentageToHsl(n, 240, 37)}, ${this.percentageToHsl(n, 250, 55)})`
+            return `background: linear-gradient(${this.percentageToHsl(n, 240, 37)}, ${this.percentageToHsl(n, 240, 37, 70, 30)})`
         },
         historicTemps() {
             var h = this.temp.history
