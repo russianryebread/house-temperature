@@ -41,7 +41,7 @@ class Temp
             })
         }
 
-        return callback(null, this.lastTemp.temp)
+        return callback(null, this.update.temp)
     }
 
     read(res, callback)
