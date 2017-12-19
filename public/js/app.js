@@ -2,6 +2,7 @@ var app = new Vue({
     el: '#app',
     data: {
         temp: {},
+        plug: {},
         error: null
     },
     mounted: function () {
@@ -30,7 +31,15 @@ var app = new Vue({
                 self.error = "Error Returning Temperature :("
                 self.temp.f = null
                 setTimeout(self.getData, 15000)
-            });
+            })
+
+            var plug_url = 'https://tenable-goldfish-6761.dataplicity.io/api/plug/192.168.1.91'
+            axios.get(plug_url).then(function (response) {
+                self.error = null
+                self.plug = response.data.device
+            }).catch(function (error) {
+                console.error(error)
+            })
         }
     },
     computed: {
@@ -60,6 +69,9 @@ var app = new Vue({
             }
 
             return { min: min.toFixed(1), max: max.toFixed(1) }
+        },
+        plugState() {
+            return (this.plug.relay_state) ? 'online' : 'offline'
         }
     }
 })
