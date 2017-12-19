@@ -29,11 +29,13 @@ var app = new Vue({
                 console.error(error)
                 self.error = "Error Returning Temperature :("
                 self.temp.f = null
+                setTimeout(self.getData, 15000)
             });
         }
     },
     computed: {
         bgcolor: function () {
+            if(!this.temp.f) return 'background: linear-gradient(rgb(189, 38, 217), rgb(95, 19, 108));'
             var n = this.normalize(this.temp.f, 100, 20)
             return `background: linear-gradient(${this.percentageToHsl(n, 240, 37)}, ${this.percentageToHsl(n, 240, 37, 70, 25)})`
         },

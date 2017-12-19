@@ -4,6 +4,7 @@
   "description": "Measure House temperature with Raspberry pi and TEMPer.",
   "main": "index.js",
   "dependencies": {
+    "bugsnag": "^2.0.1",
     "cors": "^2.8.4",
     "dotenv": "^4.0.0",
     "express": "^4.16.2",
