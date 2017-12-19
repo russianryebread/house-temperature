@@ -68,12 +68,14 @@ app.get('/api/plug/:hostname', (req, res) => {
 
 app.post('/api/plug/:hostname/on', auth, (req, res) => {
     plug.on(req.params.hostname, (device) => {
+        console.log(`${req.connection.remoteAddress} turned ${device.alias} on!`)
         res.json({ online: device.relay_state, device: device })
     })
 })
 
 app.post('/api/plug/:hostname/off', auth, (req, res) => {
     plug.off(req.params.hostname, (device) => {
+        console.log(`${req.connection.remoteAddress} turned ${device.alias} off!`)
         res.json({ online: device.relay_state, device: device })
     })
 })
