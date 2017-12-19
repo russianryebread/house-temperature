@@ -20,6 +20,7 @@
             <span v-if="error">{{ error }}</span>
             <span v-else>:(</span>
         </h2>
+        <div :class="['plug', plugState]" v-if="plug">{{ plugState }}</div>
         <div class="label max">{{ highLow.max }}</div>
         <trend
             :data="historicTemps"
