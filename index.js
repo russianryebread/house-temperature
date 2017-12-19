@@ -60,21 +60,21 @@ app.post('/api/save', (req, res) => {
     })
 })
 
-app.get('/api/plug', (req, res) => {
-    plug.status((status) => {
-        res.json({ status: status })
+app.get('/api/plug/:hostname', (req, res) => {
+    plug.status(req.params.hostname, (device) => {
+        res.json({ online: device.relay_state, device: device })
     })
 })
 
-app.post('/api/plug/on', auth, (req, res) => {
-    plug.on((status) => {
-        res.json({ status: status })
+app.post('/api/plug/:hostname/on', auth, (req, res) => {
+    plug.on(req.params.hostname, (device) => {
+        res.json({ online: device.relay_state, device: device })
     })
 })
 
-app.post('/api/plug/off', auth, (req, res) => {
-    plug.off((status) => {
-        res.json({ status: status })
+app.post('/api/plug/:hostname/off', auth, (req, res) => {
+    plug.off(req.params.hostname, (device) => {
+        res.json({ online: device.relay_state, device: device })
     })
 })
 

@@ -16,8 +16,8 @@ exports.status = (host, callback) => {
     })
 }
 
-exports.on = (callback) => {
-    return client.startDiscovery().on('device-new', (device) => {
+exports.on = (host, callback) => {
+    return client.getDevice({host: host}).then((device) => {
         device.getSysInfo().then(callback)
         device.setPowerState(true)
     }).catch((err) => {
@@ -26,8 +26,8 @@ exports.on = (callback) => {
     })
 }
 
-exports.off = () => {
-    return client.startDiscovery().on('device-new', (device) => {
+exports.off = (host, callback) => {
+    return client.getDevice({host: host}).then((device) => {
         device.getSysInfo().then(callback)
         device.setPowerState(false)
     }).catch((err) => {
