@@ -10,8 +10,10 @@ const app = express()
 const db = new Db()
 const temp = new Temp()
 
-const bugsnag = require("bugsnag")
-bugsnag.register("71fe140c9e6f570fdf17ed0a0e566ce1");
+if(process.env.BUGSNAG_API_KEY) {
+    const bugsnag = require("bugsnag")
+    bugsnag.register(process.env.BUGSNAG_API_KEY)
+}
 
 const port = (process.env.PORT) ? process.env.PORT : 80
 

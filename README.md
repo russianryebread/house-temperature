@@ -15,6 +15,7 @@ This is a no-soldering-required project, for those of you who would rather just 
 
  ## Software
 
+  - NodeJS
   - ExpressJS
     - Pug Templating Engine (optional)
     - CORS Middleware
@@ -22,7 +23,6 @@ This is a no-soldering-required project, for those of you who would rather just 
   - Temper1
   - TP-Link SmartHome API
   - SQLite3
-  - Node JS
 
   ## Building
 
@@ -30,22 +30,20 @@ This is a no-soldering-required project, for those of you who would rather just 
   
    1. Plug the probe into the extension cord.
    2. Plug the cord into the Pi
-   3. Clone this project into your desired directory
-   4. Install the dependencies
-   5. Copy `env.example` to `.env` and edit the parameters to match your environment.
-   6. Run the node application
+   3. Boot up the Pi
+   4. Run the following commands:
 
 ```bash
-# Clone the repo
+# Clone this repo
 git clone git@github.com:russianryebread/house-temperature.git
 
 # Install the dependencies
 npm install
 
-# Configure the environment file
+# Copy the environment file to .env
 cp env.example .env
 
-# Use the editor of your choice to edit it
+# Use the editor of your choice to configure it
 vi .env
 
 # You have to use sudo to read the USB device.  See the section on security for more info.
@@ -55,6 +53,9 @@ sudo node index.js
 The application should be running on the port you set it to, (defaults to port 80) unless that port is already taken.
 
 Enjoy!
+
+## Security
+Not yet complete.
 
 # Warranty
 None.  I bear no responsibility if this causes your house to freeze, pipes to break, or spontaneous combustion to occur.
