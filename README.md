@@ -6,10 +6,10 @@ This is a no-soldering-required project, for those of you who would rather just 
 
 ## Hardware
 
- - [Raspberry Pi](http://amzn.to/2DqaH7c) (~$40, but you could easily use the smaller Pi Zero)
- - [TEMPer USB Temperature Probe](http://amzn.to/2DoXJGA) (~$15)
- - [USB Extension Cable](http://amzn.to/2C5L67v) ($6)
- - [TP-Link HS100 WiFi Smart Plug](http://amzn.to/2Dro47h) (~$ 20)
+ - [Raspberry Pi](http://amzn.to/2DqaH7c) ($40, but you could easily use the smaller Pi Zero)
+ - [TEMPer USB Temperature Probe](http://amzn.to/2DoXJGA) ($15)
+ - [USB Extension Cable](http://amzn.to/2C5L67v) ($5)
+ - [TP-Link HS100 WiFi Smart Plug](http://amzn.to/2Dro47h) ($20)
 
  Total: $80.00
 
