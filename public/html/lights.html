@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Lights</title>
+ 
     <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.10/dist/vue.js"></script>
     <script src="https://unpkg.com/vuetrend/dist/vue-trend.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://js.pusher.com/4.1/pusher.min.js"></script>
     
     <link href="https://fonts.googleapis.com/css?family=Quicksand:300" rel="stylesheet"> 
-    <!-- <link href="https://rawgit.com/russianryebread/house-temperature/master/public/styles/style.css" rel="stylesheet"> -->
-    <title>Pusher Test</title>
-    <script src="https://js.pusher.com/4.1/pusher.min.js"></script>
     <style>
         body {
             margin: 0;
@@ -100,19 +99,22 @@
 </head>
 <body>
     <div id="app">
+        <div class="loader" v-if="loading">Loading...</div>
+        
         <ul class="ticker" v-if="ticker.length">
             <li v-for="t in ticker">{{t}}</li>
         </ul>
-        <button class="light-switch" @click="toggleSwitch(switchState)">Turn Lights {{(plugStateBool) ? 'Off' : 'On'}}</button>
-        <div :class="['plug', plugState]" v-if="plug">{{ plugState }}</div>
-        <div class="loader" v-if="loading">Loading...</div>
+        
+        <button class="light-switch" @click="toggleSwitch(switchState)" v-if="!loading">Turn Lights {{(plugStateBool) ? 'Off' : 'On'}}</button>
+        <div :class="['plug', plugState]" v-if="plug && !loading">{{ plugState }}</div>
+        
         <div class="image" :style="bg"></div>
     </div>
     <script>
         // Enable pusher logging - don't include this in production
         Pusher.logToConsole = true;
 
-        var pusher = new Pusher('e00904f9d5e6bca9fa0c', {
+        var pusher = new Pusher('7e3a64329c1ca507407b', {
             cluster: 'us2',
             encrypted: true
         });
@@ -145,12 +147,12 @@
                 },
 
                 pusherSetup() {
+                    var self = this
                     var channel = pusher.subscribe('house');
-                    channel.bind('plug-update', (data) => {
+                    channel.bind('plug-update', function(data) {
                         let d = new Date();
-                        this.ticker.push(`${data.message} - ${d.toLocaleString("en-US")}`)
-                        console.log(data)
-                        this.plug = data.data
+                        self.ticker.push(data.message + ' - ' + d.toLocaleString("en-US"))
+                        self.plug = data.data
                     });
                 },
 
@@ -158,7 +160,7 @@
                     var self = this
                     self.loading = true
                     var headers =  { headers: {'Authorization': 'Basic YWRtaW46Rmx5aW5nLkdlcnR5NDU='} }
-                    var plug_url = `https://tenable-goldfish-6761.dataplicity.io/api/plug/192.168.1.91/${action}`
+                    var plug_url = 'https://tenable-goldfish-6761.dataplicity.io/api/plug/192.168.1.91/' + action
                     axios.post(plug_url, null, headers).then(function (response) {
                         self.error = null
                         self.loading = false
