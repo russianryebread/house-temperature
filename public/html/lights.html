@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Lights</title>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.10/dist/vue.js"></script>
+    <script src="https://unpkg.com/vuetrend/dist/vue-trend.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:300" rel="stylesheet"> 
+    <!-- <link href="https://rawgit.com/russianryebread/house-temperature/master/public/styles/style.css" rel="stylesheet"> -->
+    <title>Pusher Test</title>
+    <script src="https://js.pusher.com/4.1/pusher.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: black;
+            color: white;
+            font-family: "Quicksand";
+        }
+
+        #app {
+            width: 100%;
+            height: 100%;
+        }
+
+        .image {
+            opacity: 0.08;
+            background-image: url("images/lights.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transition: all 1s ease-in;
+            z-index: 1;
+        }
+
+        button.light-switch {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 5px;
+            padding: 10px 15px;
+            color: white;
+            font-size: 3em;
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            cursor: pointer;
+            z-index: 4;
+            font-family: "Quicksand";
+        }
+
+        .loader {
+            text-align: center;
+            width: 300px;
+            height: 50px;
+            line-height: 50px;
+            margin-left: -150px;
+            margin-top: -25px;
+            top: 50%;
+            left: 50%;
+            position: absolute;
+            z-index: 100;
+            font-size: 50px;
+            font-weight: 100;
+        }
+
+        .ticker {
+            list-style-type: none;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 2;
+        }
+
+        .plug {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-weight: bold;
+            padding: 5px;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.5);
+            z-index: 3;
+        }
+
+        .plug.online {
+            color: green;
+        }
+
+        .plug.offline {
+            color: red;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="app">
+        <ul class="ticker" v-if="ticker.length">
+            <li v-for="t in ticker">{{t}}</li>
+        </ul>
+        <button class="light-switch" @click="toggleSwitch(switchState)">Turn Lights {{(plugStateBool) ? 'Off' : 'On'}}</button>
+        <div :class="['plug', plugState]" v-if="plug">{{ plugState }}</div>
+        <div class="loader" v-if="loading">Loading...</div>
+        <div class="image" :style="bg"></div>
+    </div>
+    <script>
+        // Enable pusher logging - don't include this in production
+        Pusher.logToConsole = true;
+
+        var pusher = new Pusher('e00904f9d5e6bca9fa0c', {
+            cluster: 'us2',
+            encrypted: true
+        });
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                plug: {},
+                loading: false,
+                error: null,
+                ticker: []
+            },
+            mounted: function () {
+                this.getData()
+                this.pusherSetup()
+            },
+
+            methods: {
+                getData() {
+                    var self = this
+                    self.loading = true
+                    var plug_url = 'https://tenable-goldfish-6761.dataplicity.io/api/plug/192.168.1.91'
+                    axios.get(plug_url).then(function (response) {
+                        self.error = null
+                        self.loading = false
+                        self.plug = response.data.device
+                    }).catch(function (error) {
+                        console.error(error)
+                    })
+                },
+
+                pusherSetup() {
+                    var channel = pusher.subscribe('house');
+                    channel.bind('plug-update', (data) => {
+                        let d = new Date();
+                        this.ticker.push(`${data.message} - ${d.toLocaleString("en-US")}`)
+                        console.log(data)
+                        this.plug = data.data
+                    });
+                },
+
+                toggleSwitch(action) {
+                    var self = this
+                    self.loading = true
+                    var headers =  { headers: {'Authorization': 'Basic YWRtaW46Rmx5aW5nLkdlcnR5NDU='} }
+                    var plug_url = `https://tenable-goldfish-6761.dataplicity.io/api/plug/192.168.1.91/${action}`
+                    axios.post(plug_url, null, headers).then(function (response) {
+                        self.error = null
+                        self.loading = false
+                        //self.plug = response.data.device
+                    }).catch(function (error) {
+                        console.error(error)
+                    })
+                }
+            },
+            computed: {
+                bg: function () {
+                    if(this.plugStateBool) return 'opacity:1;'
+                },
+
+                switchState: function () {
+                    return (this.plug.relay_state) ? 'off' : 'on'
+                },
+
+                plugStateBool: function () {
+                    return (this.plug.relay_state) ? true : false
+                },
+
+                plugState: function () {
+                    return (this.plug.relay_state) ? 'online' : 'offline'
+                }
+            }
+        })
+    </script>
+</body>
+</html>

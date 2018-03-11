@@ -1,6 +1,7 @@
 require('dotenv').config()
 const Temp = require('./temp.js')
 const plug = require('./plug.js')
+const push = require('./push.js')
 const Db = require('./db.js')
 const utils = require('./utils.js')
 const cors = require('cors')
@@ -16,12 +17,16 @@ bugsnag.register("71fe140c9e6f570fdf17ed0a0e566ce1");
 const port = (process.env.PORT) ? process.env.PORT : 80
 
 app.set('view engine', 'pug')
+app.set('views', __dirname + '/views')
 app.use(express.static('public'))
 app.use(cors())
 
 const auth = basicAuth({
     users: { 'admin': process.env.ADMIN_ACCESS_PASSWORD },
-    challenge: false
+    challenge: false,
+    unauthorizedResponse: (req) => {
+        return req.auth ? 'Incorrect login credentials' : 'No credentials provided'
+    }
 })
 
 app.get('/', (req, res) => {
@@ -68,8 +73,10 @@ app.get('/api/plug/:hostname', (req, res) => {
 
 app.post('/api/plug/:hostname/on', auth, (req, res) => {
     plug.on(req.params.hostname, (device) => {
-        var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress
-        console.log(`${ip} turned ${device.alias} on!`)
+        let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress
+        let message = `${ip} turned ${device.alias} on!`
+        console.log(message)
+        push.event('plug-update', message, device)
         res.json({ online: device.relay_state, device: device })
     })
 })
@@ -77,7 +84,9 @@ app.post('/api/plug/:hostname/on', auth, (req, res) => {
 app.post('/api/plug/:hostname/off', auth, (req, res) => {
     plug.off(req.params.hostname, (device) => {
         var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress
-        console.log(`${ip} turned ${device.alias} off!`)
+        let message = `${ip} turned ${device.alias} off!`
+        console.log(message)
+        push.event('plug-update', message)
         res.json({ online: device.relay_state, device: device })
     })
 })
