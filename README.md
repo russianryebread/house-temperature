@@ -1,6 +1,6 @@
 # House Temperature
 
-Just a simple rasperry pi project to remotely monitor my house temperature, with the option to turn on a heater is needed.
+Just a simple rasperry pi project to remotely monitor my house temperature, with the option to turn on a heater as needed.
 
 This is a no-soldering-required project, for those of you who would rather just buy some off-the-shelf components, and be done.  This is *not* an in-depth electrical engineering research project. :)
 
