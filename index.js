@@ -20,7 +20,7 @@ const port = (process.env.PORT) ? process.env.PORT : 80
 
 app.set('view engine', 'pug')
 app.set('views', __dirname + '/views')
-app.use(express.static('public'))
+app.use(express.static(__dirname + '/public'))
 app.use(cors())
 
 const auth = basicAuth({
