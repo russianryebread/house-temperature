@@ -1,4 +1,6 @@
-require('dotenv').config()
+const dotenv = require('dotenv').config({path: __dirname + '/.env'})
+if (dotenv.error) throw dotenv.error
+
 const Temp = require('./temp.js')
 const plug = require('./plug.js')
 const push = require('./push.js')
