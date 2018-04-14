@@ -125,7 +125,9 @@
                 plug: {},
                 loading: false,
                 error: null,
-                ticker: []
+                ticker: [],
+                url: 'https://unconscious-orang-utan-3108.dataplicity.io',
+                //url: 'http://russianryebread.asuscomm.com'
             },
             mounted: function () {
                 this.getData()
@@ -136,7 +138,7 @@
                 getData() {
                     var self = this
                     self.loading = true
-                    var plug_url = 'https://tenable-goldfish-6761.dataplicity.io/api/plug/192.168.1.91'
+                    var plug_url = this.url + '/api/plug/192.168.1.91'
                     axios.get(plug_url).then(function (response) {
                         self.error = null
                         self.loading = false
@@ -160,7 +162,7 @@
                     var self = this
                     self.loading = true
                     var headers =  { headers: {'Authorization': 'Basic YWRtaW46Rmx5aW5nLkdlcnR5NDU='} }
-                    var plug_url = 'https://tenable-goldfish-6761.dataplicity.io/api/plug/192.168.1.91/' + action
+                    var plug_url = this.url + '/api/plug/192.168.1.91/' + action
                     axios.post(plug_url, null, headers).then(function (response) {
                         self.error = null
                         self.loading = false
