@@ -3,7 +3,9 @@ var app = new Vue({
     data: {
         temp: {},
         plug: {},
-        error: null
+        error: null,
+        url: 'http://207.190.84.164',
+        //url: 'https://tenable-goldfish-6761.dataplicity.io'
     },
     mounted: function () {
         this.getData()
@@ -21,7 +23,7 @@ var app = new Vue({
         },
         getData() {
             var self = this
-            var url = 'https://tenable-goldfish-6761.dataplicity.io/api'
+            var url = this.url + '/api'
             axios.get(url).then(function (response) {
                 self.error = null
                 self.temp = response.data
@@ -33,7 +35,7 @@ var app = new Vue({
                 setTimeout(self.getData, 15000)
             })
 
-            var plug_url = 'https://tenable-goldfish-6761.dataplicity.io/api/plug/192.168.1.91'
+            var plug_url = this.url + '/api/plug/192.168.1.91'
             axios.get(plug_url).then(function (response) {
                 self.error = null
                 self.plug = response.data.device
