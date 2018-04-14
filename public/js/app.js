@@ -4,8 +4,8 @@ var app = new Vue({
         temp: {},
         plug: {},
         error: null,
-        url: 'http://207.190.84.164',
-        //url: 'https://tenable-goldfish-6761.dataplicity.io'
+        //url: 'http://207.190.84.164',
+        url: 'https://unconscious-orang-utan-3108.dataplicity.io'
     },
     mounted: function () {
         this.getData()
