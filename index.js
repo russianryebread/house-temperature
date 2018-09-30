@@ -24,6 +24,7 @@ app.set('view engine', 'pug')
 app.set('views', __dirname + '/views')
 app.use(express.static(__dirname + '/public'))
 app.use(cors())
+app.use(express.json());
 
 const auth = basicAuth({
     users: { 'admin': process.env.ADMIN_ACCESS_PASSWORD },
@@ -93,6 +94,15 @@ app.post('/api/plug/:hostname/off', auth, (req, res) => {
         push.event('plug-update', message)
         res.json({ online: device.relay_state, device: device })
     })
+})
+
+app.post('/api/pictureframe/message', (req, res) => {
+    if(request.body.message || request.body.image) {
+        push.event('pictureframe-update', {
+            "message": request.body.message,
+            "image": request.body.image
+        })
+    }
 })
 
 app.listen(port, () => console.log(`Temperature app listening on port ${port}!`))
