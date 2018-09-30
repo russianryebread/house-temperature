@@ -31,7 +31,15 @@ This is a no-soldering-required project, for those of you who would rather just 
    1. Plug the probe into the extension cord.
    2. Plug the cord into the Pi
    3. Boot up the Pi
-   4. Run the following commands:
+   4. Make sure the following dependencies are installed:
+
+```bash
+    # NodeJS, USB libs
+    curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+    sudo apt-get install -y nodejs libudev-dev libusb-dev libusb-1.0-0-dev
+```
+
+   5. Run the following commands:
 
 ```bash
 # Clone this repo
@@ -61,7 +69,7 @@ Not yet complete.
 None.  I bear no responsibility if this causes your house to freeze, pipes to break, or spontaneous combustion to occur.
 
 # License
-Copyright 2017 Ryan Hoshor
+Copyright 2018 Ryan Hoshor
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
