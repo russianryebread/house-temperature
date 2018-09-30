@@ -15,3 +15,7 @@ exports.event = (event, message, data = {}) => {
         data: data
     });
 }
+
+exports.trigger = (event, data = {}) => {
+    pusher.trigger(channel, event, data);
+}

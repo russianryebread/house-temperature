@@ -96,13 +96,19 @@ app.post('/api/plug/:hostname/off', auth, (req, res) => {
     })
 })
 
-app.post('/api/pictureframe/message', (req, res) => {
-    if(request.body.message || request.body.image) {
-        push.event('pictureframe-update', {
-            "message": request.body.message,
-            "image": request.body.image
-        })
+app.post('/api/pictureframe', (req, res) => {
+    console.log("Incoming Request", req.body)
+    let success = false
+
+    if(req.body.message || req.body.image) {
+        push.trigger('pictureframe-update', req.body)
+        success = true
     }
+
+    res.json({
+        "success": success,
+        "request": req.body
+    })
 })
 
 app.listen(port, () => console.log(`Temperature app listening on port ${port}!`))
