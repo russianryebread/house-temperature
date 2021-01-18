@@ -1,6 +1,8 @@
 const dotenv = require('dotenv').config({path: __dirname + '/.env'})
 if (dotenv.error) throw dotenv.error
 
+const sys = require('sys')
+const exec = require('child_process').exec
 const Temp = require('./temp.js')
 const plug = require('./plug.js')
 const push = require('./push.js')
@@ -96,19 +98,51 @@ app.post('/api/plug/:hostname/off', auth, (req, res) => {
     })
 })
 
-app.post('/api/pictureframe', (req, res) => {
-    console.log("Incoming Request", req.body)
-    let success = false
+app.get('/api/screen', (req, res) => {
+    exec("vcgencmd display_power", (error, stdout, stderr) => {
+    	let screen = stdout.trim()
+	res.json({
+	    screen: screen,
+	    power: screen.slice(-1)
+	})
+    })
+})
 
-    if(req.body.message || req.body.image) {
-        push.trigger('pictureframe-update', req.body)
-        success = true
+app.post('/api/screen/toggle', (req, res) => {
+    exec("vcgencmd display_power", (error, stdout, stderr) => {
+	let t = stdout.trim().slice(-1)
+	let toggle = (t == 1) ? 0 : 1
+        exec(`vcgencmd display_power ${toggle}`, (e, stdout, stderr) => {
+	    let out = stdout.trim()
+            res.json({
+	        screen: out,
+		power: toggle,
+		t: t
+	    })
+	})
+    })
+})
+
+app.post('/api/pictureframe', (req, res) => {
+    let response = {
+        success: false,
+        request: req.body
     }
 
-    res.json({
-        "success": success,
-        "request": req.body
-    })
+    // Are you human?
+    if(!req.body.captcha || req.body.captcha != 4) {
+        return res.status(403).json(response)
+    }
+
+    // What?  No payload?
+    if(!req.body.message && !req.body.image) {
+        return res.status(418).json(response)
+    }
+
+    // All good!
+    push.trigger('pictureframe-update', req.body)
+    response.success = true
+    return res.status(200).json(response)
 })
 
 app.listen(port, () => console.log(`Temperature app listening on port ${port}!`))
