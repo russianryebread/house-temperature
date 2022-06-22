@@ -11,7 +11,7 @@
     "express-basic-auth": "^1.2.0",
     "pug": "^2.0.4",
     "pusher": "^4.0.2",
-    "sqlite3": "^5.0.1",
+    "sqlite3": "^5.0.3",
     "temper1": "0.0.9",
     "tplink-smarthome-api": "^0.20.1"
   },
